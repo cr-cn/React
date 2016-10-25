@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<script src='build/react.js'></script>
+	<script src='build/react-dom.js'></script>
+	<script src='build/browser.min.js'></script>
+</head>
+<body>
+	<div id="example"></div>
+	<!-- 
+		this.props.children所指的节点就是node，包括文本节点等
+		有三种可能：
+		如果当前组件没有自节点，它就是undefined
+		如果有一个子节点，数据类型就是object
+		如果有多个子节点，数据类型就是array
+
+
+		React提供一个工具方法React.Children来处理this.props.children，我们可以用React.Children.map来遍历子节点
+		而不用担心this.props.children的数据类型是undefined还是object
+	-->
+
+	<script type='text/babel'>
+		var NotesList = React.createClass({
+			render:function(){
+				return(
+					<ol>
+						{
+							React.Children.map(this.props.children,function(child){
+								return <li>{child}</li>
+							})
+						}
+					</ol>
+				)
+			}
+		});
+
+
+		ReactDOM.render(
+			<NotesList>
+				<span>hello</span>  <span>world</span>
+			</NotesList>,
+			document.getElementById('example')
+		)
+	</script>
+</body>
+</html>

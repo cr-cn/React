@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Ajax</title>
+	<meta charset="utf-8">
+	<script src='build/react.js'></script>
+	<script src='build/react-dom.js'></script>
+	<script src='build/browser.min.js'></script>
+	<script src='http://libs.baidu.com/jquery/1.9.1/jquery.min.js'></script>
+</head>
+<body>
+	<div id="example"></div>
+	 <!-- 
+			组件的数据来源，通常是通过Ajax请求从服务器获取的，可以使用componentDidMount方法来设置Ajax请求，等到请求成功
+			再用this.setState方法来重新渲染UI
+	    -->
+	   
+	<script type='text/babel'>
+		var UserGist = React.createClass({
+			getInitialState:function(){
+				return{
+					username:'',
+					lastGistUrl:''
+				}
+			},
+			componentDidMount:function(){
+				$.get(this.props.source,function(result){
+					var lastGist = result[0];
+					if(this.isMounted()){
+						this.setState({
+							username:lastGist.owner.login,
+							lastGistUrl:lastGist.html_url
+						})
+					}
+				}.bind(this))
+			},
+			render:function(){
+				return(
+					<div>
+						{this.state.username}'s last gist is
+						<a href={this.state.lastGistUrl}>here</a>
+					</div>
+				)
+			}
+		});
+
+		ReactDOM.render(
+			<UserGist source='https://api.github.com/users/octocat/gists' />,
+			document.getElementById('example')
+		)
+	</script>
+
+	 <!-- 
+		上面代码
+	  -->
+</body>
+</html>
